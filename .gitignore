@@ -1,0 +1,12 @@
+# CMake
+build/
+CMakeCache.txt
+CMakeFiles/
+
+# compiled output
+*.o
+*.out
+tinygcc
+
+# editors
+.vscode/
