@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
     if (argc != 2)
     {
         std::cerr << "Incorrect usage. Correct usage is..." << std::endl;
-        std::cerr << "hydro <input.hy>" << std::endl;
+        std::cerr << "tiny <tiny.gcc>" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
 
     std::vector<Token> tokens = tokenize(contents);
     {
-        std::fstream file("out.asm", std::ios::out);
+        std::fstream file("output.asm", std::ios::out);
         file << tokens_to_asm(tokens);
     }
 
