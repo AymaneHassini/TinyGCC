@@ -3,19 +3,10 @@
 #include <sstream>
 #include <optional>
 #include <vector>
+#include "./tokenization.hpp"
 
-enum class TokenType
-{
-    _return,
-    int_lit,
-    semi
-};
 
-struct Token
-{
-    TokenType type;
-    std::optional<std::string> value{};
-};
+
 
 std::vector<Token> tokenize(const std::string& str)
 {
@@ -105,7 +96,9 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    std::string contents;
+    Tokenizer tokenizer(std::move(contents));
+    std::vector<Token> tokens = tokenizer.tokenize();
+    
     {
         std::stringstream contents_stream;
         std::fstream input(argv[1], std::ios::in);
@@ -115,7 +108,7 @@ int main(int argc, char* argv[])
 
     std::vector<Token> tokens = tokenize(contents);
     {
-        std::fstream file("output.asm", std::ios::out);
+        std::fstream file("out.asm", std::ios::out);
         file << tokens_to_asm(tokens);
     }
 
