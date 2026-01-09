@@ -17,6 +17,43 @@ public:
         {
 
         }
+        std::optional<NodeExpr> parse_expr()
+        {
+            if(peek().has_value() && peek().value().type()== TokenType::int_lit){
+                return NodeExpr{
+                    .int_lit = consume()
+                };
+                else{
+                    return {};
+                }
+            }
+        }
+        std::optional<NodeExit> parse() {
+            std::optional<NodeExit> exit_node;
+            while(peek().has_value()){
+                if(peak().value().type() == TokenType::exit){
+                    consume();
+                    if (auto node_expr = parse_expr()){
+                        exit_node = NodeExit{
+                            .expr = node_expr.value()
+                        };
+                    }
+                    else{
+                        std::cerr << "Invalid Expression" << std::endl;
+                        exit (EXIT_FAILURE);
+                    }
+                }
+                if(peek().has_value() || peek().value().type == TokenType :: semi){
+                   consume();
+                }
+                else{
+                     std::cerr << "Invalid expression" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+        }
+        m_index = 0;
+        return exit_node;
 
 private:
  [[nodiscard]] inline std::optional<Token> peek(int ahead = 1) const

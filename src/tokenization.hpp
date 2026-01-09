@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-
 enum class TokenType { _return, int_lit, semi };
 
 struct Token {
