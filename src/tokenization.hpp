@@ -2,84 +2,76 @@
 
 #include <string>
 #include <vector>
+#include <optional>
+#include <cctype>
+#include <iostream>
+
 enum class TokenType { _return, int_lit, semi };
 
 struct Token {
     TokenType type;
-    std::optional<std::string> value {};
+    std::optional<std::string> value{};
 };
 
 class Tokenizer {
 public:
-    inline explicit Tokenizer(std::string src)
-        : m_src(std::move(src))
-    {
-    }
+    explicit Tokenizer(std::string src)
+        : m_src(std::move(src)) {}
 
-    inline std::vector<Token> tokenize()
-    {
+    std::vector<Token> tokenize() {
         std::vector<Token> tokens;
         std::string buf;
+
         while (peek().has_value()) {
-            if (std::isalpha(peek().value())) {
+            char c = peek().value();
+
+            if (std::isalpha(c)) {
                 buf.push_back(consume());
                 while (peek().has_value() && std::isalnum(peek().value())) {
                     buf.push_back(consume());
                 }
+
                 if (buf == "return") {
-                    tokens.push_back({ .type = TokenType::_return });
-                    buf.clear();
-                    continue;
-                }
-                else {
-                    std::cerr << "You messed up!" << std::endl;
+                    tokens.push_back({TokenType::_return});
+                } else {
+                    std::cerr << "Unknown identifier\n";
                     exit(EXIT_FAILURE);
                 }
+                buf.clear();
             }
-            else if (std::isdigit(peek().value())) {
+            else if (std::isdigit(c)) {
                 buf.push_back(consume());
                 while (peek().has_value() && std::isdigit(peek().value())) {
                     buf.push_back(consume());
                 }
-                tokens.push_back({ .type = TokenType::int_lit, .value = buf });
+                tokens.push_back({TokenType::int_lit, buf});
                 buf.clear();
-                continue;
             }
-            else if (peek().value() == ';') {
+            else if (c == ';') {
                 consume();
-                tokens.push_back({ .type = TokenType::semi });
-                continue;
+                tokens.push_back({TokenType::semi});
             }
-            else if (std::isspace(peek().value())) {
+            else if (std::isspace(c)) {
                 consume();
-                continue;
             }
             else {
-                std::cerr << "You messed up!" << std::endl;
+                std::cerr << "Invalid character\n";
                 exit(EXIT_FAILURE);
             }
         }
-        m_index = 0;
         return tokens;
     }
 
 private:
-    [[nodiscard]] inline std::optional<char> peek(int ahead = 1) const
-    {
-        if (m_index + ahead > m_src.length()) {
-            return {};
-        }
-        else {
-            return m_src.at(m_index);
-        }
+    std::optional<char> peek() const {
+        if (m_index >= m_src.size()) return {};
+        return m_src[m_index];
     }
 
-    inline char consume()
-    {
-        return m_src.at(m_index++);
+    char consume() {
+        return m_src[m_index++];
     }
 
-    const std::string m_src;
+    std::string m_src;
     size_t m_index = 0;
-    
 };
