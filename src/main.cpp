@@ -7,6 +7,7 @@
 #include "generation.hpp"
 
 int main(int argc, char* argv[]) {
+    
     if (argc != 2) {
         std::cerr << "Usage: tiny <file>\n";
         return EXIT_FAILURE;
