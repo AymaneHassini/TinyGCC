@@ -12,6 +12,5 @@ $$
         \text{int\_lit} \\
         \text{ident}
     \end{cases}
-    
 \end{align}
 $$
