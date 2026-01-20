@@ -1,6 +1,5 @@
 $$
 \begin{align}
-
     [\text{prog}] &\to [\text{stmt}]^* \\
     [\text{stmt}] &\to
     \begin{cases}
